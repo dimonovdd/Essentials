@@ -93,30 +93,24 @@ namespace Samples.ViewModel
             if (await Permissions.RequestAsync<Permissions.ContactsRead>() != PermissionStatus.Granted)
                 return;
 
-            GetAllContact();
-        }
-
-        void GetAllContact()
-        {
             if (IsBusy)
                 return;
             IsBusy = true;
             ContactsList?.Clear();
             try
             {
-                var contacts = Contacts.GetAllAsync();
+                var contactStore = await Contacts.GetContactsStore();
 
-                _ = Task.Run(async () =>
-                      {
-                          await foreach (var contact in contacts)
-                          {
-                              MainThread.BeginInvokeOnMainThread(()
-                                  => ContactsList.Add(
-                                      $"{contact.Name}" +
-                                      $" {contact.Phones?.FirstOrDefault()?.Value} " +
-                                      $"({contact.Phones?.FirstOrDefault()?.Type})"));
-                          }
-                      });
+                var contactList = contactStore.GetAll(cancellationToken: default);
+
+                foreach (var contact in contactList)
+                {
+                    MainThread.BeginInvokeOnMainThread(()
+                        => ContactsList.Add(
+                            $"{contact.Name}" +
+                            $" {contact.Phones?.FirstOrDefault()?.Value} " +
+                            $"({contact.Phones?.FirstOrDefault()?.Type})"));
+                }
             }
             catch (Exception ex)
             {

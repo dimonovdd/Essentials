@@ -38,6 +38,10 @@ namespace Xamarin.Essentials
         }
 
 #endif
+
+        static Task<ContactsStore> PlatformGetContactsStore(CancellationToken cancellationToken)
+            => null;
+
         static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
@@ -149,5 +153,13 @@ namespace Xamarin.Essentials
                 picker.DismissModalViewController(true);
         }
 #endif
+    }
+
+    public partial class ContactsStore
+    {
+        public IEnumerable<Contact> GetAllPlatform(CancellationToken cancellationToken = default)
+        {
+            return null;
+        }
     }
 }

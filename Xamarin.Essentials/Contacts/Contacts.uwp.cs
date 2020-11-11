@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
+using ContactUWP = Windows.ApplicationModel.Contacts.Contact;
 
 namespace Xamarin.Essentials
 {
@@ -19,23 +20,19 @@ namespace Xamarin.Essentials
             return ConvertContact(contactSelected);
         }
 
-        static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+        static async Task<ContactsStore> PlatformGetContactsStore(CancellationToken cancellationToken)
         {
             var contactStore = await ContactManager.RequestStoreAsync()
                 .AsTask(cancellationToken).ConfigureAwait(false);
             if (contactStore == null)
-                yield break;
+                return null;
 
             var contacts = await contactStore.FindContactsAsync()
                 .AsTask(cancellationToken).ConfigureAwait(false);
             if (contacts == null)
-                yield break;
+                return null;
 
-            foreach (var item in contacts)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                yield return ConvertContact(item);
-            }
+            return new ContactsStore(contacts);
         }
 
         internal static Contact ConvertContact(Windows.ApplicationModel.Contacts.Contact contact)
@@ -71,5 +68,24 @@ namespace Xamarin.Essentials
                 ContactEmailKind.Work => ContactType.Work,
                 _ => ContactType.Unknown,
             };
+    }
+
+    public partial class ContactsStore
+    {
+        IReadOnlyList<ContactUWP> contacts;
+
+        internal ContactsStore(IReadOnlyList<ContactUWP> contacts)
+        {
+            this.contacts = contacts;
+        }
+
+        public IEnumerable<Contact> GetAllPlatform(CancellationToken cancellationToken = default)
+        {
+            foreach (var item in contacts)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                yield return Contacts.ConvertContact(item);
+            }
+        }
     }
 }

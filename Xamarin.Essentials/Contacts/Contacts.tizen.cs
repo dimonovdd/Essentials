@@ -50,11 +50,15 @@ namespace Xamarin.Essentials
             return await tcs.Task;
         }
 
+        static Task<ContactsStore> PlatformGetContactsStore(CancellationToken cancellationToken)
+            => null;
+
         static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
 
             var contactsList = manager.Database.GetAll(TizenContact.Uri, 0, 0);
+
             for (var i = 0; i < contactsList?.Count; i++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -139,5 +143,13 @@ namespace Xamarin.Essentials
                 TizenNumber.Types.Fax => ContactType.Work,
                 _ => ContactType.Unknown
             };
+    }
+
+    public partial class ContactsStore
+    {
+        public IEnumerable<Contact> GetAllPlatform(CancellationToken cancellationToken = default)
+        {
+            return null;
+        }
     }
 }

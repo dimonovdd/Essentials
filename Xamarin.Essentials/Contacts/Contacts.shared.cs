@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,11 +16,9 @@ namespace Xamarin.Essentials
             return await PlatformPickContactAsync();
         }
 
-#if !NETSTANDARD1_0
-        public static IAsyncEnumerable<Contact> GetAllAsync(CancellationToken cancellationToken = default)
-            => PlatformGetAllAsync(cancellationToken);
+        public static Task<ContactsStore> GetContactsStore(CancellationToken cancellationToken = default)
+            => PlatformGetContactsStore(cancellationToken);
 
-#endif
 #if __IOS__ || __MACOS__ || TIZEN
         static string GetName(string name)
             => string.IsNullOrWhiteSpace(name) ? string.Empty : $" {name}";
@@ -31,5 +30,15 @@ namespace Xamarin.Essentials
         Unknown = 0,
         Personal = 1,
         Work = 2
+    }
+
+    public partial class ContactsStore
+    {
+        internal ContactsStore()
+        {
+        }
+
+        public IEnumerable<Contact> GetAll(CancellationToken cancellationToken = default)
+            => GetAllPlatform(cancellationToken);
     }
 }
