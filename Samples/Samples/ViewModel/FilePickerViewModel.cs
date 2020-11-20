@@ -133,7 +133,7 @@ namespace Samples.ViewModel
             try
             {
                 var result = await FilePicker.PickAsync(options);
-
+                await Task.Delay(1000);
                 if (result != null)
                 {
                     Text = $"File Name: {result.FileName}";
