@@ -50,6 +50,9 @@ namespace Xamarin.Essentials
                     items.Add(fileUrl); // No title specified
             }
 
+            if (!string.IsNullOrEmpty(request.Title))
+                items.Add(new NSString(request.Title));
+
             var activityController = new UIActivityViewController(items.ToArray(), null);
 
             var vc = Platform.GetCurrentViewController();

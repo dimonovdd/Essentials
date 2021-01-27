@@ -27,6 +27,9 @@ namespace Xamarin.Essentials
             if (!string.IsNullOrWhiteSpace(request.Title))
                 items.Add(new NSString(request.Title));
 
+            if (!string.IsNullOrWhiteSpace(request.Text))
+                items.Add(new NSString(request.Text));
+
             foreach (var file in request.Files)
                 items.Add(NSUrl.FromFilename(file.FullPath));
 

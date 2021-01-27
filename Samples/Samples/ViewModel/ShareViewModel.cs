@@ -18,7 +18,9 @@ namespace Samples.ViewModel
         string shareFileAttachmentContents;
         string shareFileAttachmentName;
         string shareFileTitle;
+        string shareFileText;
         string shareFilesTitle;
+        string shareFilesText;
         string shareFile1AttachmentContents;
         string shareFile1AttachmentName;
         string shareFile2AttachmentContents;
@@ -79,6 +81,12 @@ namespace Samples.ViewModel
             set => SetProperty(ref shareFileTitle, value);
         }
 
+        public string ShareFileText
+        {
+            get => shareFileText;
+            set => SetProperty(ref shareFileText, value);
+        }
+
         public string ShareFileAttachmentContents
         {
             get => shareFileAttachmentContents;
@@ -95,6 +103,12 @@ namespace Samples.ViewModel
         {
             get => shareFilesTitle;
             set => SetProperty(ref shareFilesTitle, value);
+        }
+
+        public string ShareFilesText
+        {
+            get => shareFilesText;
+            set => SetProperty(ref shareFilesText, value);
         }
 
         public string ShareFile1AttachmentContents
@@ -142,6 +156,7 @@ namespace Samples.ViewModel
             {
                 Title = ShareFileTitle,
                 File = new ShareFile(file),
+                Text = ShareFileText,
                 PresentationSourceBounds = GetRectangle(element)
             });
         }
@@ -159,6 +174,7 @@ namespace Samples.ViewModel
             {
                 Title = ShareFilesTitle,
                 Files = new List<ShareFile> { new ShareFile(file1), new ShareFile(file2) },
+                Text = ShareFilesText,
                 PresentationSourceBounds = GetRectangle(element)
             });
         }

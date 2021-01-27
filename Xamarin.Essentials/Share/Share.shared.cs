@@ -60,6 +60,8 @@ namespace Xamarin.Essentials
     {
         public string Title { get; set; }
 
+        public string Text { get; set; }
+
 #if !NETSTANDARD1_0
         public Rectangle PresentationSourceBounds { get; set; } = Rectangle.Empty;
 #endif
@@ -77,8 +79,6 @@ namespace Xamarin.Essentials
             : this(text) => Title = title;
 
         public string Subject { get; set; }
-
-        public string Text { get; set; }
 
         public string Uri { get; set; }
     }
@@ -136,7 +136,10 @@ namespace Xamarin.Essentials
 
         public static explicit operator ShareMultipleFilesRequest(ShareFileRequest request)
         {
-            var requestFiles = new ShareMultipleFilesRequest(request.Title, new ShareFile[] { request.File });
+            var requestFiles = new ShareMultipleFilesRequest(request.Title, new ShareFile[] { request.File })
+            {
+                Text = request.Text
+            };
 #if !NETSTANDARD1_0
             requestFiles.PresentationSourceBounds = request.PresentationSourceBounds;
 #endif
@@ -163,5 +166,7 @@ namespace Xamarin.Essentials
             : base(file)
         {
         }
+
+        public string Text { get; set; }
     }
 }

@@ -41,6 +41,9 @@ namespace Xamarin.Essentials
             if (!string.IsNullOrEmpty(request.Title))
                 appControl.ExtraData.Add(AppControlData.Title, request.Title);
 
+            if (!string.IsNullOrEmpty(request.Text))
+                appControl.ExtraData.Add(AppControlData.Text, request.Text);
+
             foreach (var file in request.Files)
                 appControl.ExtraData.Add(AppControlData.Path, file.FullPath);
 
